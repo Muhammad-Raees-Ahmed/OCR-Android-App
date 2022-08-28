@@ -1,15 +1,27 @@
 package com.example.ocrapplication;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +38,10 @@ import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ProgressDialog mProgressDialog;
     TextView textView;
     private static final int VIDEO_CAPTURE = 101;
+    private int PERMISSIONS = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         firebaseModel = FirebaseModel.getInstance();
-        textView=findViewById(R.id.input_text);
+        textView = findViewById(R.id.input_text);
         videoView = findViewById(R.id.video_view);
         editText = findViewById(R.id.name);
         btn_recordVideo = findViewById(R.id.btn_record);
@@ -54,6 +71,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_takephoto.setOnClickListener(this);
         btn_recordVideo.setOnClickListener(this);
         btn_uploadData.setOnClickListener(this);
+        // permissions
+
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{
+                    Manifest.permission.CAMERA
+            }, PERMISSIONS);
+        }
+
     }
 
     @Override
@@ -72,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
     public void imagepicker() {
         ImagePicker.with(this)
                 .crop()                    //Crop image(Optional), Check Customization for more option
@@ -79,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
                 .start();
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -111,22 +136,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void getTextFromImage(Bitmap bitmap){
-        TextRecognizer textRecognize =new TextRecognizer.Builder(this).build();
-        if(!textRecognize.isOperational()){
+    private void getTextFromImage(Bitmap bitmap) {
+        TextRecognizer textRecognize = new TextRecognizer.Builder(this).build();
+        if (!textRecognize.isOperational()) {
             Toast.makeText(this, "Error Occurred", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Frame frame=new Frame.Builder().setBitmap(bitmap).build();
-            SparseArray<TextBlock> textBlockSparseArray=textRecognize.detect(frame);
-            StringBuilder stringBuilder=new StringBuilder();
-            for (int i=0;i<textBlockSparseArray.size();i++){
-                TextBlock textBlock=textBlockSparseArray.valueAt(i);
+        } else {
+            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+            SparseArray<TextBlock> textBlockSparseArray = textRecognize.detect(frame);
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < textBlockSparseArray.size(); i++) {
+                TextBlock textBlock = textBlockSparseArray.valueAt(i);
                 stringBuilder.append(textBlock.getValue());
             }
             textView.setText(stringBuilder.toString());
         }
     }
+
     public void validate() {
         String name = editText.getText().toString();
         String videoPath = path;
@@ -151,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
     public void updateUI(boolean isSuccess) {
         if (isSuccess) {
             mProgressDialog.dismiss();
