@@ -45,6 +45,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    //
 
     Button btn_recordVideo, btn_uploadData, btn_takephoto;
     VideoView videoView;
