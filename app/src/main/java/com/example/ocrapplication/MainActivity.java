@@ -30,6 +30,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -48,14 +49,12 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    //
-
-    Button btn_recordVideo, btn_uploadData, btn_takephoto,btn_search;
+    Button btn_recordVideo, btn_uploadData, btn_takephoto, btn_search;
     VideoView videoView;
     String path = "";
-    EditText editText1,editText2;
+    EditText editText1, editText2;
     FirebaseModel firebaseModel;
-    ProgressDialog mProgressDialog;
+    ProgressBar progressBar;
     TextView textView;
     private static final int VIDEO_CAPTURE = 101;
     private int PERMISSIONS = 100;
@@ -75,7 +74,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_recordVideo = findViewById(R.id.btn_record);
         btn_uploadData = findViewById(R.id.btn_upload);
         btn_takephoto = findViewById(R.id.btn_captureImage);
-        btn_search=findViewById(R.id.btn_search);
+        btn_search = findViewById(R.id.btn_search);
+        progressBar=findViewById(R.id.progress);
         btn_takephoto.setOnClickListener(this);
         btn_recordVideo.setOnClickListener(this);
         btn_uploadData.setOnClickListener(this);
@@ -111,17 +111,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void searchVideo_Play() {
-        String videoName=editText2.getText().toString();
-        if (videoName==""){
+        String videoName = editText2.getText().toString();
+        if (videoName == "") {
             Toast.makeText(this, "Plz fill fields", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setMessage("Searching...");
-            mProgressDialog.setProgressStyle(ProgressDialog.BUTTON_POSITIVE);
-            mProgressDialog.show();
-            firebaseModel.getVideoFromVideoName(this,videoName);
+        } else {
+            progressBar.setVisibility(View.VISIBLE);
+            firebaseModel.getVideoFromVideoName(this, videoName);
         }
     }
 
@@ -190,13 +185,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (name.equals("") || videoPath.equals("")) {
             Toast.makeText(this, " plz fill all fields", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, "good", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Plz Wait", Toast.LENGTH_LONG).show();
             try {
-                mProgressDialog = new ProgressDialog(this);
-                mProgressDialog.setIndeterminate(true);
-                mProgressDialog.setMessage("Uploading...");
-                mProgressDialog.setProgressStyle(ProgressDialog.BUTTON_POSITIVE);
-                mProgressDialog.show();
+                progressBar = findViewById(R.id.progress);
+                progressBar.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 firebaseModel.storeVideo(this, name, videoPath);
             } catch (Exception e) {
                 System.out.println("alert :" + e);
@@ -208,30 +202,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void updateUI(boolean isSuccess) {
         if (isSuccess) {
-            mProgressDialog.dismiss();
+            progressBar.setVisibility(View.INVISIBLE);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             Toast.makeText(this, "Video Uploaded", Toast.LENGTH_SHORT).show();
+
         } else {
             Toast.makeText(MainActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
         }
     }
-    public void  updateUISuccess(boolean isSuccessfull,String videoUrl){
-         url=videoUrl;
-        if (isSuccessfull==true  && videoUrl !=null){
-            Toast.makeText(this, "Found", Toast.LENGTH_SHORT).show();
-//            videoView.setVideoPath(videoUrl);
-//            MediaController mediaController = new MediaController(this);
-//            videoView.setMediaController(mediaController);
-//            mediaController.setAnchorView(videoView);
-//            videoView.start();
 
+    public void updateUISuccess(boolean isSuccessfull, String videoUrl) {
+        url = videoUrl;
+        if (isSuccessfull == true && videoUrl != null) {
+            Toast.makeText(this, "Found", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.INVISIBLE);
             Intent send = new Intent(MainActivity.this, MainActivity2.class);
             startActivity(send);
-                mProgressDialog.dismiss();
 
-
-        }
-        else{
-            mProgressDialog.dismiss();
+        } else {
+            progressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(this, "Not found", Toast.LENGTH_SHORT).show();
         }
     }

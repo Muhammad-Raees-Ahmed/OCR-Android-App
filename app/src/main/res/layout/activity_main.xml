@@ -35,6 +35,14 @@
                 android:padding="7dp"
                 android:textSize="17sp" />
         </androidx.cardview.widget.CardView>
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/purple_700"
+            android:layout_centerInParent="true"
+            android:visibility="invisible" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
