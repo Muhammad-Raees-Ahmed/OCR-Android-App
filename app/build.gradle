@@ -12,7 +12,8 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-
+// Cannot fit requested classes in a single dex file (# methods: 128402 > 65536) solve this by below line
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -20,8 +21,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
         }
+
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
