@@ -43,9 +43,12 @@ import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         firebaseModel = FirebaseModel.getInstance();
         textView = findViewById(R.id.input_text);
@@ -111,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void searchVideo_Play() {
-        String videoName = editText2.getText().toString();
+        String videoName = editText2.getText().toString().toLowerCase();
         if (videoName == "") {
             Toast.makeText(this, "Plz fill fields", Toast.LENGTH_SHORT).show();
         } else {
@@ -142,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             videoView.setMediaController(mediaController);
             mediaController.setAnchorView(videoView);
             videoView.pause();
-            Toast.makeText(this, path, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, path, Toast.LENGTH_SHORT).show();
         }
 //        // check image
         else if (resultCode == Activity.RESULT_OK && requestCode != VIDEO_CAPTURE) {
@@ -177,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void validate() {
-        String name = editText1.getText().toString();
+        String name = editText1.getText().toString().toLowerCase();
         String videoPath = path;
 
         if (name.equals("") & path.equals("")) {

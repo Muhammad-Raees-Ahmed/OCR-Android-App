@@ -71,7 +71,9 @@ public class FirebaseModel {
                         if (task.isSuccessful()){
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                if (document.get("name").equals(name)){
+                                String name1= (String) document.get("name");
+                                name.toLowerCase();
+                                if (name1.startsWith(name)){
                                     videoUrl=(document.getString("videourl"));
 
                                 }
