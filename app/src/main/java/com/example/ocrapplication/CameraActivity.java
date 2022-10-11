@@ -36,9 +36,16 @@ public class CameraActivity extends AppCompatActivity {
         firebaseModel = FirebaseModel.getInstance();
 
         progressBar=findViewById(R.id.progress3);
-        name = getIntent().getExtras().getString("path");
-        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-        searchVideo_Play(name);
+        try{
+            name = getIntent().getExtras().getString("path");
+            searchVideo_Play(name);
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+
+//        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+
 
     }
     private void searchVideo_Play(String videoName) {
@@ -77,5 +84,13 @@ public class CameraActivity extends AppCompatActivity {
         });
 
 //            progressBar.setVisibility(View.INVISIBLE);
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        // perform your action here
+        Intent intent=new Intent(CameraActivity.this,ClientWorkActivity.class);
+        startActivity(intent);
+
     }
 }
