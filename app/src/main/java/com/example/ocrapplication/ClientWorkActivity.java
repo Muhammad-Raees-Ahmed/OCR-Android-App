@@ -14,6 +14,8 @@ import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +64,9 @@ public class ClientWorkActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_work);
+
+
+
         String fileName = "kids";
         String filePlace= "android.resource://"+getPackageName() + "/raw/" +fileName;
         cameraView = (SurfaceView) findViewById(R.id.surface_view);
