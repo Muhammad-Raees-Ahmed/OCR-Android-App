@@ -28,7 +28,6 @@ public class Detail {
         return name;
     }
 
-
     public long getCreatedDate() {
         return createdDate;
     }

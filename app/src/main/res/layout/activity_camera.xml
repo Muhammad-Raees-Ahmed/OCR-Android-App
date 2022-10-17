@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".CameraActivity">
 
-
-
     <VideoView
         android:id="@+id/fullscreen_videoview2"
         android:layout_width="match_parent"
