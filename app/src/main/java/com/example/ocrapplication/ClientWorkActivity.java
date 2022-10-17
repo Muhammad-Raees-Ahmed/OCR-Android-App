@@ -162,18 +162,21 @@ public class ClientWorkActivity extends AppCompatActivity {
 
 
                     }
-//                    try{
-//                        Intent send = new Intent(ClientWorkActivity.this, CameraActivity.class);
-//                        send.putExtra("path", textCapture);
-////                                    progressBar.setVisibility(View.INVISIBLE);
-//                        startActivity(send);
-//                    }catch (Exception e){
-//                        Toast.makeText(ClientWorkActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-//                    }
+
                 }
 
             });
 
+
+
         }
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        // perform your action here
+        Intent intent=new Intent(ClientWorkActivity.this,VideoActivity.class);
+        startActivity(intent);
+
     }
 }

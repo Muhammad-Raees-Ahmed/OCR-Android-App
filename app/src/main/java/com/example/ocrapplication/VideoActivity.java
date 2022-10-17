@@ -136,4 +136,12 @@ public class VideoActivity extends AppCompatActivity {
             Toast.makeText(VideoActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
         }
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        // perform your action here
+        Intent intent=new Intent(VideoActivity.this,ClientWorkActivity.class);
+        startActivity(intent);
+
+    }
 }
