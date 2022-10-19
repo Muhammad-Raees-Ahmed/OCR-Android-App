@@ -61,11 +61,13 @@ public class CameraActivity extends AppCompatActivity {
     public void updateUISuccess2(boolean isSuccessfull, String videoUrl) {
 
         if (isSuccessfull == true && videoUrl != null) {
-            Toast.makeText(this, "Found", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Found", Toast.LENGTH_SHORT).show();
             playVideo(videoUrl);
         } else {
             progressBar.setVisibility(View.INVISIBLE);
-            Toast.makeText(this, "Not found", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Not found", Toast.LENGTH_SHORT).show();
+            Intent intent=new Intent(CameraActivity.this,ClientWorkActivity.class);
+            startActivity(intent);
         }
     }
     public void playVideo(String videourl) {
